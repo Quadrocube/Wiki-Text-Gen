@@ -1,3 +1,4 @@
 Simple Wiki-Taught Markov Text Generator
+Usage: ./run-all.sh LINK_COUNT DOMAIN
 
 P.s. LurkMOAR!

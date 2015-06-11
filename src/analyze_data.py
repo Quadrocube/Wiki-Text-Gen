@@ -17,7 +17,12 @@ if __name__ == '__main__':
         try:
             with open(texts_dir + file_path, 'r') as f:
                 try:
+                    # For every triplet of words estimate
+                    # P(3rd word | 1st word and 2nd word) == 'how frequently the 3rd word occurs after 1st and 2nd'
+                    # P(2nd word | 1st word)
+                    # P(word) == 'how frequently `word` occurs overall'
                     for line in f.readlines():
+                        # Heuristic not to count wiki headers and footers
                         if is_banned(line):
                             break
                         words = re.findall("[a-zа-яё]+|\.", line.lower())
@@ -30,6 +35,11 @@ if __name__ == '__main__':
         except IsADirectoryError as e:
             continue
 
+    # We will use the following model for text generation: we take the first
+    # word in a sentence randomly weighted from the overall word distribution.
+    # Then, iteratively, we look at the previous 2 (or 1 in case of the 2nd word
+    # in a sentence) words and take the most 'probable' word that we saw after them
+    # (from the dict `most_frequent_biplets` or `most_frequent_solos` accordingly)
     most_frequent_biplets = {}
     most_frequent_solos = {}
     for (biplet, thirds_set) in biplets.items():
